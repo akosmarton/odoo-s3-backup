@@ -1,0 +1,7 @@
+#!/bin/sh
+
+S3_BUCKET=${S3_BUCKET#"s3://"}
+S3_BUCKET=${S3_BUCKET%"/"}
+
+pg_dump --no-owner | gzip | s3cmd --access_key=${S3_ACCESS_KEY} --secret_key=${S3_SECRET_KEY} --host-bucket "%(bucket)s.${S3_ENDPOINT}" put - s3://${S3_BUCKET}/${PGDATABASE}_`date +"%Y%m%d%H%M%S"`.gz
+s3cmd --access_key=${S3_ACCESS_KEY} --secret_key=${S3_SECRET_KEY} --host-bucket "%(bucket)s.${S3_ENDPOINT}" sync ${ODOO_DATA_DIR%/}/filestore/${PGDATABASE} s3://${S3_BUCKET}/
