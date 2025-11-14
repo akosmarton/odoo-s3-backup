@@ -1,7 +1,7 @@
 FROM alpine:3
 
 RUN apk --no-cache add postgresql15-client py3-pip && \
-    pip install s3cmd
+    pip install --break-system-packages s3cmd
 
 COPY backup /usr/local/bin/
 
